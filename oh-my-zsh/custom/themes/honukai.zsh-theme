@@ -1,10 +1,5 @@
 # Based on the great ys theme (http://ysmood.org/wp/2013/03/my-ys-terminal-theme/)
 
-# Machine name.
-function box_name {
-    [ -f ~/.box-name ] && cat ~/.box-name || echo $HOST
-}
-
 # Directory info.
 local current_dir='${PWD/#$HOME/~}'
 
@@ -38,38 +33,17 @@ ys_hg_prompt_info() {
 	fi
 }
 
-# Prompt format: \n # USER at MACHINE in DIRECTORY on git:BRANCH STATE [TIME] \n $
+# Prompt character
+local prompt_character='%(?:%{$fg[green]%}:%{$fg[red]%})%(!.#.$)%{$reset_color%} '
+
+# Prompt format:
+# # [HH:MM:SS] DIRECTORY on git:BRANCH STATE [TIME]
+# $ (if user)
+# # (if root)
 PROMPT="
 %{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
-%{$fg[cyan]%}%n \
-%{$fg[white]%}in \
+%{$fg[white]%}[%*] \
 %{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
 ${hg_info}\
-${git_info} \
-%{$fg[white]%}[%*]
-%{$terminfo[bold]$fg[red]%}→ %{$reset_color%}"
-
-#%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
-#%{$fg[cyan]%}%n \
-#%{$fg[white]%}at \
-#%{$fg[green]%}$(box_name) \
-#%{$fg[white]%}in \
-#%{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
-#${hg_info}\
-#${git_info} \
-#%{$fg[white]%}[%*]
-#%{$terminfo[bold]$fg[red]%}→ %{$reset_color%}"
-
-if [[ "$USER" == "root" ]]; then
-PROMPT="
-%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
-%{$bg[yellow]%}%{$fg[cyan]%}%n%{$reset_color%} \
-%{$fg[white]%}at \
-%{$fg[green]%}$(box_name) \
-%{$fg[white]%}in \
-%{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
-${hg_info}\
-${git_info} \
-%{$fg[white]%}[%*]
-%{$terminfo[bold]$fg[red]%}→ %{$reset_color%}"
-fi
+${git_info}
+${prompt_character}"
